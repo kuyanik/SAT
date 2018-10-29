@@ -3,25 +3,14 @@
 #include <vector>
 using namespace std;
 
-struct sat{
-
-	vector< vector<int> > arr;
-	int loop;
-	int  full_loop;
-	sat(){
-		arr.resize(100);
-		loop = 0;
-		full_loop = 0;
-	}
-}
 
 bool check_match(vector<int> arr,vector<int> key){
 
-	for(int i; i<arr.size()-1; i++){
-
-		for(int j; j<key.size()-1; j++){
-			if(arr[i] == key[j])
+	for(int i=0; i<arr.size(); i++){
+		for(int j=0; j<key.size(); j++){
+			if(arr[i] == key[j]){
 				return 1;
+			}
 		}
 	}
 	return 0;
@@ -32,10 +21,10 @@ int find_last_negative(vector<int> key){
 	int index = 0;
 	int size = key.size();
 
-	while(i <= size-1){
+	while(i < size){
 		if( key[i] != abs(key[i]) )
 			index = i;
-			++i;
+		++i;
 	}
 	return index;
 }
@@ -54,37 +43,42 @@ bool is_all_positive(vector <int> key){
 	}
 	return 1;
 }
-sat alter_key(sat box,int loop,int full_loop ){
+void alter_key(vector<int>& key,int& full_loop){
 
-	int last_index = key.size() -1;
-	bool loop = 0; //checking if we are at the end
-	int last_negative_index = find_last_negative(key); //finding the last negative item
+	int last_index = key.size() - 1;
 
 	if(is_all_positive(key) == 1){
 		key[0] *= -1;
 	}
 
-	if(is_all_negative(key) == 1)
-		return (key,0,1);
-
-	if( key[last_index] != abs( key[last_index] ) ){ // if last item is negative
-		key[size-1] *= -1;
-		loop = 1;
-		return (key,1,0);
+	else if(is_all_negative(key) == 1){
+		full_loop = 1;
 	}
-	if(loop == 1){ //if we just did a full loop
+
+	else if( key[last_index] != abs( key[last_index] ) ){ // if last item is negative
+		key[last_index] *= -1;
+		int last_negative_index = find_last_negative(key); //finding the last negative item
 		key[last_negative_index+1] *= -1;
-		return key;
+		key[last_negative_index+2] *= -1;
 	}
 	else{
+		int last_negative_index = find_last_negative(key); //finding the last negative item
 		key[last_negative_index] *= -1;
 		key[last_negative_index+1] *= -1;
-		return key;
 	}
 }
+vector<int> create_key(int variable){
+	vector<int> new_key;
+	for(int i =1; i<=variable ;i++){
+		new_key.push_back(i);
+	}
+	return new_key;
+}
+
 int main(){
 
-	sat my_box();
+	vector< vector<int> > arr;
+	arr.resize(100);
 
 	ifstream infile;
 	infile.open("example.txt");
@@ -107,14 +101,25 @@ int main(){
 	}
 
 	infile.close();
+	int full_loop = 0;
+	int match = 1;
+	vector<int> key = create_key(4);
 
 	while(full_loop != 1){
-		while(match == 1 && j<arr_ptr[j].size() ){
-			match = check_match(arr_ptr[j],key);
+		int j = 0;
+		while(j < arr.size()){
+			match = check_match(arr[j],key);
 			++j;
+			if(match == 0)
+				break;
 		}
-		key = alter_key(key);
+		alter_key(key,full_loop);
+		if(match == 1)
+			break;
 	}
+	cout<<"writing the key: ";
+	for(int i = 0;i < key.size();i++)
+	cout<<key[i]<<" ";
 
 	return 0;
 }
