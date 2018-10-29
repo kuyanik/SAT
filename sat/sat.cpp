@@ -3,6 +3,18 @@
 #include <vector>
 using namespace std;
 
+struct sat{
+
+	vector< vector<int> > arr;
+	int loop;
+	int  full_loop;
+	sat(){
+		arr.resize(100);
+		loop = 0;
+		full_loop = 0;
+	}
+}
+
 bool check_match(vector<int> arr,vector<int> key){
 
 	for(int i; i<arr.size()-1; i++){
@@ -28,35 +40,51 @@ int find_last_negative(vector<int> key){
 	return index;
 }
 
-
-
-vector<int> alter_key(vector<int> key){
-
-	int size = key.size();
-	bool full_loop = 0;
-
-	if( key[size-1] != abs( key[size-1] ) ){
-		key[size-1] *= -1;
-		full_loop = 1;
+bool is_all_negative(vector<int> key){
+	for(int i =0;i<key.size();i++){
+		if(abs(key[i]) == key[i])
+			return 0;
 	}
-	int last_negative_index = find_last_negative(key);
-
-	if(full_loop == 1){
-		key[last_negative_index+1] *= -1;
-	}
-
-	else if(last_negative_index != 0){
-		key[last_negative_index] *= -1;
-		key[last_negative_index+1] *= -1;
-	}
-	else
-		key[last_negative_index] *= -1;
-	return key;
+	return 1;
 }
+bool is_all_positive(vector <int> key){
+	for(int i =0;i<key.size();i++){
+		if(abs(key[i]) != key[i])
+			return 0;
+	}
+	return 1;
+}
+sat alter_key(sat box,int loop,int full_loop ){
 
+	int last_index = key.size() -1;
+	bool loop = 0; //checking if we are at the end
+	int last_negative_index = find_last_negative(key); //finding the last negative item
+
+	if(is_all_positive(key) == 1){
+		key[0] *= -1;
+	}
+
+	if(is_all_negative(key) == 1)
+		return (key,0,1);
+
+	if( key[last_index] != abs( key[last_index] ) ){ // if last item is negative
+		key[size-1] *= -1;
+		loop = 1;
+		return (key,1,0);
+	}
+	if(loop == 1){ //if we just did a full loop
+		key[last_negative_index+1] *= -1;
+		return key;
+	}
+	else{
+		key[last_negative_index] *= -1;
+		key[last_negative_index+1] *= -1;
+		return key;
+	}
+}
 int main(){
 
-	vector<int> arr_ptr;
+	sat my_box();
 
 	ifstream infile;
 	infile.open("example.txt");
@@ -67,46 +95,26 @@ int main(){
 
 	int i = 0;
 	int x;
-	bool flag =0;
 
 	while(infile >> x){
-cout<<x<<endl;
-		while(x != 0){
-			if(x != '-'){
-				if(flag ==1){
-					arr_ptr.push_back(-x);
-					flag = 0;
-				}
-				else{
-					arr_ptr.push_back(x);
-				}
-			}
-			else{
-				flag = 1;
-			}
+	cout<<x<<endl;
+		if(x !=0 ){
+			arr[i].push_back(x);
 		}
-		i++:
+		else if (x == 0){
+			++i;
+		}
 	}
 
 	infile.close();
 
-	vector<int> key = {1,2,3};
-	vector<int> trigger_key = {-1,-2,-3};
-	/*int j =0;
-	bool match = 1;
-	bool trigger = 0;
-	while(trigger != 1){
-
-		if(key == trigger_key)
-			trigger = 1;
-
-		while(match != 0 && j<arr_ptr[j].size() ){
-
+	while(full_loop != 1){
+		while(match == 1 && j<arr_ptr[j].size() ){
 			match = check_match(arr_ptr[j],key);
 			++j;
 		}
 		key = alter_key(key);
 	}
-*/
+
 	return 0;
 }
