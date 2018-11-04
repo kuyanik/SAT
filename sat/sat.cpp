@@ -5,17 +5,13 @@ using namespace std;
 
 
 bool check_match(vector<int> arr,vector<int> key){
-	bool equal = 0;
 	for(int i = 0; i < arr.size(); i++){
 		for(int j = 0; j < key.size(); j++){
 			if( arr[i] == key[j] )
-				equal = 1;
+				return 1;
 		}
-		if(equal == 0)
-			return 0;
-		equal = 0;
 	}
-	return 1;
+	return 0;
 }
 
 vector<int> create_key(int variable_count){ // creates a key of variable count
@@ -37,7 +33,7 @@ bool all_negative(vector<int> arr){
 
 	int i = 0;
 	while(i < arr.size()){
-		if( arr[i] == abs(arr[i]) )
+		if( arr[i] != abs( arr[i] ) )
 			return 0;
 		++i;
 	}
@@ -47,18 +43,15 @@ bool all_negative(vector<int> arr){
 bool solver ( vector< vector<int> > arr , vector<int> key , int count){
 
 	int j = 0;
-	bool flag = 0;
+	bool match = 1;
 	while(j < arr.size() ){
 		if( !check_match(arr[j],key) ){
-			flag = 1;
-			++j;
+			match = 0;
 		}
-		else{
-			++j;
-		}
+		++j;
 	}
 
-	if(flag != 1){
+	if(match == 1){
 		cout<<"Printing the key :";
 		int k = 0;
 		while( k < key.size() ){
@@ -68,11 +61,11 @@ bool solver ( vector< vector<int> > arr , vector<int> key , int count){
 		return 1;
 	}
 
-	else if( !all_negative(key) ){
+	else if( all_negative(key) && match == 0 ){
 		return 0;
 	}
 
-	if( count <= key.size() ){
+	else if( count < key.size() ){
 		vector<int> key_positive = key;
 		vector<int> key_negative = key;
 		key_negative[count] *= -1;
@@ -128,8 +121,8 @@ int main(){
 		++j;
 		i=0;
 	}
-	cout<<"\nTESTING THE SOLVER " <<endl;
 	vector<int> key = create_key(4);
+	cout<<"\nTESTING THE SOLVER " <<endl;
 	cout<< "Solver outcome : "<<solver(arr,key,0)<<endl;
 	return 0;
 }
