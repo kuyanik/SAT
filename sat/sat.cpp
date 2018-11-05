@@ -22,55 +22,47 @@ vector<int> create_key(int variable_count){ // creates a key of variable count
 	return new_key;
 }
 
-int power(int x, int y){
-	if(y==0)
-		return 1;
-
-	return x * power(x,y-1);
-}
-
 bool all_negative(vector<int> arr){
 
 	int i = 0;
 	while(i < arr.size()){
-		if( arr[i] != abs( arr[i] ) )
+		if( arr[i]>0 ){
 			return 0;
+		}
 		++i;
 	}
 	return 1;
 }
 
-bool solver ( vector< vector<int> > arr , vector<int> key , int count){
+
+void solver (vector<vector<int>> arr, vector<int> key, vector<int> &remember, int count) { // my solving algorithm
 
 	int j = 0;
 	bool match = 1;
-	while(j < arr.size() ){
-		if( !check_match(arr[j],key) ){
+	while(j < arr.size()-1) {
+		if(!check_match(arr[j],key)) {
 			match = 0;
 		}
 		++j;
 	}
 
-	if(match == 1){
-		cout<<"Printing the key :";
+	if(match == 1 && key != remember) {
+		cout<<"Printing the key : ";
 		int k = 0;
-		while( k < key.size() ){
+		while(k < key.size()) {
 			cout<<key[k];
 			++k;
 		}
-		return 1;
+		cout<<endl;
+		remember = key;
 	}
-
-	else if( all_negative(key) && match == 0 ){
-		return 0;
-	}
-
-	else if( count < key.size() ){
+	if(count < key.size()) {
 		vector<int> key_positive = key;
 		vector<int> key_negative = key;
 		key_negative[count] *= -1;
-		return solver(arr,key_positive,++count);
-		return solver(arr,key_negative,++count);
+		++count;
+		solver(arr, key_positive, remember, count);
+		solver(arr, key_negative, remember, count);
 	}
 
 }
@@ -85,8 +77,10 @@ int main(){
 	}
 
 	int x;
+	string skip;
+	getline(infile,skip,'f');
 	while(infile >> x){
-		temp.push_back(x);
+			temp.push_back(x);
 	}
 
 	infile.close();
@@ -97,7 +91,10 @@ int main(){
 	vector< vector<int> > arr;
 	arr.push_back( vector<int>() );
 	int j = 0;
-	int i = 0;
+	int i = 2;
+	int variable_count = temp[0];
+	int clause_count = temp[1];
+
 	while(i < temp.size() ){ // transfering temp to individual arrays
 		if(temp[i] == 0){
 			++j;
@@ -110,7 +107,7 @@ int main(){
 		}
 	}
 
-	cout<<"Test"<<endl; // Print testing
+	cout<<"\nPrint Test"<<endl; // Print testing
 	i=0;
 	j=0;
 	while(j < arr.size() ){
@@ -120,9 +117,12 @@ int main(){
 		}
 		++j;
 		i=0;
+		cout<<endl;
 	}
-	vector<int> key = create_key(4);
+	vector<int> key = create_key(variable_count);
+	vector<int> remember;
 	cout<<"\nTESTING THE SOLVER " <<endl;
-	cout<< "Solver outcome : "<<solver(arr,key,0)<<endl;
+	solver(arr,key,remember,0);
+
 	return 0;
 }
