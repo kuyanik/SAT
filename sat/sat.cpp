@@ -39,7 +39,7 @@ void solver (vector<vector<int>> arr, vector<int> key, vector<int> &remember, in
 
 	int j = 0;
 	bool match = 1;
-	while(j < arr.size()-1) {
+	while(j < arr.size()-1 && key != remember) {
 		if(!check_match(arr[j],key)) {
 			match = 0;
 		}
@@ -85,10 +85,10 @@ int main(){
 
 	infile.close();
 
-	for(int i = 0; i < temp.size(); ++i){// temp array filling
+/*	for(int i = 0; i < temp.size(); ++i){// temp array raw form print
 		cout<<temp[i];
 	}
-	vector< vector<int> > arr;
+*/	vector< vector<int> > arr;
 	arr.push_back( vector<int>() );
 	int j = 0;
 	int i = 2;
@@ -107,7 +107,7 @@ int main(){
 		}
 	}
 
-	cout<<"\nPrint Test"<<endl; // Print testing
+/*	cout<<"\nPrint Test"<<endl; // Printing the clauses
 	i=0;
 	j=0;
 	while(j < arr.size() ){
@@ -119,7 +119,7 @@ int main(){
 		i=0;
 		cout<<endl;
 	}
-	vector<int> key = create_key(variable_count);
+*/	vector<int> key = create_key(variable_count);
 	vector<int> remember;
 	cout<<"\nTESTING THE SOLVER " <<endl;
 	solver(arr,key,remember,0);
