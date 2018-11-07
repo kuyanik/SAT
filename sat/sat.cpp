@@ -22,19 +22,6 @@ vector<int> create_key(int variable_count){ // creates a key of variable count
 	return new_key;
 }
 
-bool all_negative(vector<int> arr){
-
-	int i = 0;
-	while(i < arr.size()){
-		if( arr[i]>0 ){
-			return 0;
-		}
-		++i;
-	}
-	return 1;
-}
-
-
 void solver (vector<vector<int>> arr, vector<int> key, vector<int> &remember, int count) { // my solving algorithm
 
 	int j = 0;
@@ -50,7 +37,7 @@ void solver (vector<vector<int>> arr, vector<int> key, vector<int> &remember, in
 		cout<<"Printing the key : ";
 		int k = 0;
 		while(k < key.size()) {
-			cout<<key[k];
+			cout<<key[k]<<" ";
 			++k;
 		}
 		cout<<endl;
