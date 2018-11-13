@@ -36,28 +36,19 @@ vector<int> solver (vector<vector<int>> arr, int var_count) { // my solving algo
 		}
 		++i;
 	}
-/*
-	i = 0;
-	while(i < key.size()) {
-		cout<<key[i]<<" ";
-		++i;
-	}
-	cout<<endl;
-*/
 	while(i < arr.size()){
 		if(check_match(arr[i], key) == false){
 			return empty;
 		}
 		++i;
 	}
-cout<<"DO I RETURN EVER"<<endl;
 	return key;
 }
 int main(){
 	srand(time(0));
 	vector<int> temp;
 	ifstream infile;
-	infile.open("example.txt");
+	infile.open("example.dimacs");
 	if (!infile){
 		cout<< "Unable to open the file";
 		exit(1);
@@ -92,20 +83,6 @@ int main(){
 			++i;
 		}
 	}
-/*
-	cout<<"\nPrint Test"<<endl; // Printing the clauses
-	i=0;
-	j=0;
-	while(j < arr.size() ){
-		while(i < arr[j].size() ){
-			cout<<arr[j][i];
-			++i;
-		}
-		++j;
-		i=0;
-		cout<<endl;
-	}
-*/
 	vector<int> key,empty;
 	cout<<"\nTESTING THE SOLVER " <<endl;
 		while(key == empty) {

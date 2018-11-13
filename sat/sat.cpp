@@ -57,7 +57,7 @@ int main(){
 
 	vector<int> temp;
 	ifstream infile;
-	infile.open("example.txt");
+	infile.open("example.dimacs");
 	if (!infile){
 		cout<< "Unable to open the file";
 		exit(1);
